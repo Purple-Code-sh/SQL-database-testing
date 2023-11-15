@@ -31,7 +31,7 @@ VALUES
 (7, 'Compartiendo mi receta favorita de pastel de chocolate 🍰❤️'),
 (6, 'Aprendiendo algo nuevo cada día 💡 #NuncaDejesDeAprender'),
 (2, 'Viendo una película genial con amigos 🎬🍿 #NocheDePelícula'),
-(9, 'Explorando nuevos lugares para viajar ✈️🌎 #Aventura'),
+(5, 'Explorando nuevos lugares para viajar ✈️🌎 #Aventura'),
 (6, 'Disfrutando de un café con una buena lectura 📚☕️ #MomentosRelajantes'),
 (8, 'Practicando deportes al aire libre 🏃‍♂️🌳 #VidaActiva'),
 (6, 'Celebrando un logro importante en el trabajo 🎉💼 #ÉxitoProfesional'),
@@ -51,3 +51,11 @@ FROM tweets
 GROUP BY user_id
 ORDER BY tweet_count DESC;
 
+SELECT tweet_id, tweet_text, user_id
+FROM tweets
+WHERE user_id IN(
+    SELECT following_id
+    FROM followers
+    GROUP BY following_id
+    HAVING COUNT(*)>=2
+);
