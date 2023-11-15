@@ -59,3 +59,12 @@ WHERE user_id IN(
     GROUP BY following_id
     HAVING COUNT(*)>=2
 );
+
+DELETE FROM tweets WHERE tweet_id = 1;
+DELETE FROM tweets WHERE user_id = 3;
+DELETE FROM tweets WHERE tweet_text LIKE '%disfrutando%';
+
+UPDATE tweets SET num_likes = num_likes + 1 WHERE tweet_id = 8;
+
+
+
