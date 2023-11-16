@@ -11,6 +11,7 @@
 -- order by followers DESC
 -- limit 2;
 
+DROP TABLE IF EXISTS tweet_likes;
 DROP TABLE IF EXISTS tweets;
 
 CREATE TABLE tweets(
@@ -46,25 +47,39 @@ VALUES
 (1, 'Compartiendo momentos especiales con la familia 👨‍👩‍👧‍👦❤️ #AmorFamiliar'),
 (10, 'Planificando mi próxima aventura de viaje ✈️🗺️ #Explorador');
 
-SELECT user_id, COUNT(*) AS tweet_count
-FROM tweets
-GROUP BY user_id
-ORDER BY tweet_count DESC;
+-- select user_id, COUNT(*) as tweet_count
+-- from tweets
+-- group by user_id
+-- order by tweet_count DESC;
+-- 
+-- select tweet_id, tweet_text, user_id
+-- from tweets
+-- where user_id in(
+--     select following_id
+--     from followers
+--     group by following_id
+--     HAVING COUNT(*)>=2
+-- );
 
-SELECT tweet_id, tweet_text, user_id
-FROM tweets
-WHERE user_id IN(
-    SELECT following_id
-    FROM followers
-    GROUP BY following_id
-    HAVING COUNT(*)>=2
-);
-
-DELETE FROM tweets WHERE tweet_id = 1;
-DELETE FROM tweets WHERE user_id = 3;
-DELETE FROM tweets WHERE tweet_text LIKE '%disfrutando%';
+-- DELETE FROM tweets WHERE tweet_id = 1;
+-- DELETE FROM tweets WHERE user_id = 3;
+-- DELETE FROM tweets WHERE tweet_text LIKE '%disfrutando%';
 
 UPDATE tweets SET num_likes = num_likes + 1 WHERE tweet_id = 8;
+UPDATE tweets SET tweet_text = REPLACE(tweet_text,' a ',' XXXX ')
+WHERE tweet_text LIKE '%a%';
+
+CREATE TABLE tweet_likes(
+    user_id INT NOT NULL,
+    tweet_id INT NOT NULL,
+    FOREIGN KEY(user_id) REFERENCES users(user_id),
+    FOREIGN KEY(tweet_id) REFERENCES tweets(tweet_id),
+    PRIMARY KEY(tweet_id, user_id)
+);
+
+INSERT INTO tweet_likes (user_id, tweet_id)
+VALUES
+(1,3),(2,6),(9,17),(4,15),(1,12),(5,16),(3,17),(2,19),(3,13),(8,18);
 
 
 
