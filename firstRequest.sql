@@ -79,7 +79,50 @@ CREATE TABLE tweet_likes(
 
 INSERT INTO tweet_likes (user_id, tweet_id)
 VALUES
-(1,3),(2,6),(9,17),(4,15),(1,12),(5,16),(3,17),(2,19),(3,13),(8,18);
+(1,3),(2,6),(9,17),(4,15),(1,12),(5,16),(3,6),(2,19),(3,13),(8,18),(10,17),(5,17),(4,6),(5,6),(7,13),(7,6);
 
+-- select tweet_id, COUNT(*) as like_count
+-- from tweet_likes
+-- group by tweet_id
+-- order by like_count DESC;
 
+/* Add column to a table, using ALTER TABLE*/
+-- ALTER TABLE users
+-- ADD follower_count int not null DEFAULT 0;
+
+DROP TRIGGER IF EXISTS increase_follower_count;
+
+DELIMITER &$
+CREATE TRIGGER increase_follower_count
+    AFTER INSERT ON followers
+    FOR EACH ROW
+    BEGIN
+        UPDATE users SET follower_count = follower_count + 1
+        WHERE user_id = NEW.following_id;
+    END &$
+    
+ CREATE TRIGGER decrease_follower_count
+    AFTER INSERT ON followers
+    FOR EACH ROW
+    BEGIN
+        UPDATE users SET follower_count = follower_count - 1
+        WHERE user_id = NEW.following_id;
+    END &$
+DELIMITER ;
+
+/* new inserted values to actualize followers of 4 and 7 user_id*/
+-- insert into followers(follower_id, following_id)
+-- VALUES
+-- (3,4),
+-- (5,4),
+-- (6,4),
+-- (1,4),
+-- (3,7),
+-- (4,7),
+-- (8,7);
+
+SELECT following_id, COUNT(*) AS user_id_most_followed
+FROM followers
+GROUP BY following_id
+ORDER BY user_id_most_followed DESC;
 
